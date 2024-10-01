@@ -2,6 +2,7 @@
 #define FUNCTIONS_H
 
 #include <string>
+#include <stdexcept>
 
 // struct for Pixel (short is a 2 byte signed integer)
 struct Pixel {

@@ -18,7 +18,57 @@ void initializeImage(Pixel image[][MAX_HEIGHT]) {
 }
 
 void loadImage(string filename, Pixel image[][MAX_HEIGHT], unsigned int& width, unsigned int& height) {
-  // TODO: implement (part 1)
+  std::ifstream s(filename);
+
+  if (!s.is_open())
+  {
+    throw std::runtime_error("Failed to open " + filename);
+  }
+
+  std::string s_preamble;
+  int f_width, f_height, max_val;
+
+  s >> s_preamble;
+  // std::cout << "file type read: " << s_preamble << std::endl;
+ 
+  if (s_preamble != "P3" && s_preamble != "p3")
+  {
+    throw std::runtime_error("Invalid type " + s_preamble );
+  }
+
+  s >> f_width >> f_height;
+
+  if (f_width < 0 || f_width > static_cast<int>(MAX_WIDTH) || f_height < 0 || f_height > static_cast<int>(MAX_HEIGHT))
+  {
+    throw std::runtime_error("Invalid dimensions");
+  }
+
+  width = f_width;
+  height = f_height;
+
+  s >> max_val;
+
+  if (max_val != 255)
+  {
+    throw std::runtime_error("Invalid max color value");
+  }
+
+  // collection is in row major
+  for (unsigned int row = 0; row < height; row++)
+  {
+    for (unsigned int col = 0; col < width; col++)
+    {
+      short r, g, b;
+      if (!(s >> r >> g >> b)) throw std::runtime_error("Not enough values");
+
+      if (r < 0 || r > max_val || g < 0 || g > max_val || b < 0 || b > max_val) throw std::runtime_error("Invalid color value");
+
+      image[col][row] = {r, g, b}; // converts to column major
+    }
+  }
+
+  short extra;
+  if (s >> extra) throw std::runtime_error("Too many values");
 }
 
 void outputImage(string filename, Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int height) {
