@@ -43,6 +43,11 @@ int main() {
   // TODO: add code to validate input (part 1)
   // Exit program with error if there are problems with 
   //   targetWidth or targetHeight
+  if (targetWidth > width ||  targetHeight > height)
+  {
+    std::cout << "Invalid target dimensions" << std::endl;
+    return 1;
+  }
 
   cout << "Start carving..." << endl;
   
