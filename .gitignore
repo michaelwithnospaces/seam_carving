@@ -3,3 +3,4 @@
 *.out
 *.dll
 .vscode/
+*.ppm
