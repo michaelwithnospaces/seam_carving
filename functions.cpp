@@ -93,8 +93,62 @@ void outputImage(string filename, Pixel image[][MAX_HEIGHT], unsigned int width,
 }
 
 unsigned int energy(Pixel image[][MAX_HEIGHT], unsigned int x, unsigned int y, unsigned int width, unsigned int height) {
-  // TODO: implement (part 1)
-  return 0;
+  
+  struct vec2 {
+    int x;
+    int y;
+  };
+
+  vec2 left, right, top, bottom;
+
+  left.y = y;
+  right.y = y;
+  if (x == 0) 
+  {
+    left.x = width - 1;
+    right.x = x + 1;
+  }
+  else if (x == width - 1)
+  {
+    left.x = x - 1;
+    right.x = 0;
+  }
+  else
+  {
+    left.x = x - 1;
+    right.x = x + 1;
+  }
+
+  top.x = x;
+  bottom.x = x;
+  if (y == 0) 
+  {
+    top.y = height - 1;
+    bottom.y = y + 1;
+  }
+  else if (y == height - 1)
+  {
+    top.y = y - 1;
+    bottom.y = 0;
+  }
+  else
+  {
+    bottom.y = y + 1;
+    top.y = y - 1;
+  }
+
+  int xGradientR = image[right.x][right.y].r - image[left.x][left.y].r;
+  int xGradientG = image[right.x][right.y].g - image[left.x][left.y].g;
+  int xGradientB = image[right.x][right.y].b - image[left.x][left.y].b;
+
+  int yGradientR = image[bottom.x][bottom.y].r - image[top.x][top.y].r;
+  int yGradientG = image[bottom.x][bottom.y].g - image[top.x][top.y].g;
+  int yGradientB = image[bottom.x][bottom.y].b - image[top.x][top.y].b;
+
+  unsigned int energy = (xGradientR * xGradientR) + (xGradientG * xGradientG) + (xGradientB * xGradientB)
+                      + (yGradientR * yGradientR) + (yGradientG * yGradientG) + (yGradientB * yGradientB);
+
+  return energy;
 }
 
 // uncomment functions as you implement them (part 2)
