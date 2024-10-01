@@ -72,7 +72,24 @@ void loadImage(string filename, Pixel image[][MAX_HEIGHT], unsigned int& width, 
 }
 
 void outputImage(string filename, Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int height) {
-  // TODO: implement (part 1)
+  std::ofstream s(filename);
+
+  if (!s.is_open())
+  {
+    throw std::runtime_error("Failed to open " + filename);
+  }
+
+  s << "P3\n" << width << " " << height << "\n255" << std::endl;
+
+  for (unsigned int row = 0; row < height; row++)
+  {
+    for (unsigned int col = 0; col < width; col++)
+    {
+      s << image[col][row].r << std::endl;
+      s << image[col][row].g << std::endl;
+      s << image[col][row].b << std::endl;
+    }
+  }
 }
 
 unsigned int energy(Pixel image[][MAX_HEIGHT], unsigned int x, unsigned int y, unsigned int width, unsigned int height) {
