@@ -103,16 +103,19 @@ unsigned int energy(Pixel image[][MAX_HEIGHT], unsigned int x, unsigned int y, u
 
   left.y = y;
   right.y = y;
+  // pixel on left border
   if (x == 0) 
   {
     left.x = width - 1;
     right.x = x + 1;
   }
+  // pixel on right border
   else if (x == width - 1)
   {
     left.x = x - 1;
     right.x = 0;
   }
+  // pixel has left and right available
   else
   {
     left.x = x - 1;
@@ -121,16 +124,19 @@ unsigned int energy(Pixel image[][MAX_HEIGHT], unsigned int x, unsigned int y, u
 
   top.x = x;
   bottom.x = x;
+  // pixel on top border
   if (y == 0) 
   {
     top.y = height - 1;
     bottom.y = y + 1;
   }
+  // pixel on bottom border
   else if (y == height - 1)
   {
     top.y = y - 1;
     bottom.y = 0;
   }
+  // pixel has top and bottom available
   else
   {
     bottom.y = y + 1;
@@ -169,6 +175,8 @@ unsigned int loadVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_col,
     unsigned int min_energy = energy(image, curr_col, curr_row + 1, width, height);
     unsigned int min_col = curr_col;
 
+    // right border case
+    // come first for priority
     if (curr_col < width - 1)
     {
       unsigned int left_energy = energy(image, curr_col + 1, curr_row + 1, width, height);
@@ -179,6 +187,8 @@ unsigned int loadVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_col,
       }
     }
 
+    // left border case
+    // comes last because only right if strictly less then both left and straight
     if (curr_col > 0)
     {
       unsigned int right_energy = energy(image, curr_col - 1, curr_row + 1, width, height);
@@ -209,9 +219,19 @@ unsigned int loadVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_col,
 //   // TODO: implement (part 2)
 // }
 
-// void removeVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int& width, unsigned int height, unsigned int verticalSeam[]) {
-//   // TODO: implement (part 2)
-// }
+void removeVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int& width, unsigned int height, unsigned int verticalSeam[]) {
+  for (unsigned int row = 0; row < height; row++)
+  {
+    unsigned int col_to_remove = verticalSeam[row];
+    
+    // copy next index to current index
+    for (unsigned int col = col_to_remove; col < width - 1; col++)
+    {
+      image[col][row] = image[col + 1][row];
+    }
+  }
+  width--;
+}
 
 // void removeHorizontalSeam(Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int& height, unsigned int horizontalSeam[]) {
 //   // TODO: implement (part 2)
