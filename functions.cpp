@@ -160,7 +160,6 @@ unsigned int energy(Pixel image[][MAX_HEIGHT], unsigned int x, unsigned int y, u
 // uncomment functions as you implement them (part 2)
 
 unsigned int loadVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_col, unsigned int width, unsigned int height, unsigned int seam[]) {
-  // TODO: implement (part 2)
   unsigned int curr_col = start_col;
   unsigned int curr_row = 0;
   unsigned int accumulated_energy = 0;
@@ -172,10 +171,11 @@ unsigned int loadVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_col,
 
     if (curr_row == height - 1) break;
 
+    // straight forward case
     unsigned int min_energy = energy(image, curr_col, curr_row + 1, width, height);
     unsigned int min_col = curr_col;
 
-    // right border case
+    // not left border case
     // come first for priority
     if (curr_col < width - 1)
     {
@@ -187,7 +187,7 @@ unsigned int loadVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_col,
       }
     }
 
-    // left border case
+    // not right border case
     // comes last because only right if strictly less then both left and straight
     if (curr_col > 0)
     {
@@ -205,11 +205,51 @@ unsigned int loadVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_col,
   return accumulated_energy;
 }
 
+unsigned int loadHorizontalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_row, unsigned int width, unsigned int height, unsigned int seam[]) {
+  unsigned int curr_row = start_row;
+  unsigned int curr_col = 0;
+  unsigned int accumulated_energy = 0;
 
-// unsigned int loadHorizontalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_row, unsigned int width, unsigned int height, unsigned int seam[]) {
-//   // TODO: implement (part 2)
-//   return 0;
-// }
+  while (curr_col < width)
+  {
+    seam[curr_col] = curr_row;
+    accumulated_energy += energy(image, curr_col, curr_row, width, height);
+
+    if (curr_col == width - 1) break;
+
+    // straight forward case
+    unsigned int min_energy = energy(image, curr_col + 1, curr_row, width, height);
+    unsigned int min_row = curr_row;
+
+    // not left border case
+    // come first for priority
+    if (curr_row > 0)
+    {
+      unsigned int right_energy = energy(image, curr_col + 1, curr_row - 1, width, height);
+      if (right_energy < min_energy)
+      {
+        min_energy = right_energy;
+        min_row = curr_row - 1;
+      }
+    }
+
+    // not right border case
+    // comes last because only right if strictly less then both left and straight
+    if (curr_row < height - 1)
+    {
+      unsigned int left_energy = energy(image, curr_col + 1, curr_row + 1, width, height);
+      if (left_energy < min_energy)
+      {
+        min_energy = left_energy;
+        min_row = curr_row + 1;
+      }
+    }
+
+    curr_row = min_row;
+    curr_col++;
+  }
+  return accumulated_energy;
+}
 
 void findMinVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int height, unsigned int seam[]) {
   unsigned int temp[MAX_HEIGHT];
