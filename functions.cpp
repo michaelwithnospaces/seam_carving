@@ -303,6 +303,16 @@ void removeVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int& width, unsigned
   width--;
 }
 
-// void removeHorizontalSeam(Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int& height, unsigned int horizontalSeam[]) {
-//   // TODO: implement (part 2)
-// }
+void removeHorizontalSeam(Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int& height, unsigned int horizontalSeam[]) {
+  for (unsigned int col = 0; col < width; col++)
+  {
+    unsigned int row_to_remove = horizontalSeam[col];
+    
+    // copy next index to current index
+    for (unsigned int row = row_to_remove; row < height - 1; row++)
+    {
+      image[col][row] = image[col][row + 1];
+    }
+  }
+  height--;
+}
