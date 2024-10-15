@@ -211,9 +211,24 @@ unsigned int loadVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_col,
 //   return 0;
 // }
 
-// void findMinVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int height, unsigned int seam[]) {
-//   // TODO: implement (part 2)
-// }
+void findMinVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int height, unsigned int seam[]) {
+  unsigned int temp[MAX_HEIGHT];
+  unsigned int lowest_start_col = 0;
+  unsigned int lowest_energy = loadVerticalSeam(image, lowest_start_col, width, height, temp);
+  
+  for (unsigned int start_col = 1; start_col < width; start_col++)
+  {
+    unsigned int curr_energy = loadVerticalSeam(image, start_col, width, height, temp);
+
+    if (curr_energy < lowest_energy)
+    {
+      lowest_start_col = start_col;
+      lowest_energy = curr_energy;
+    }
+  }
+
+  loadVerticalSeam(image, lowest_start_col, width, height, seam);
+}
 
 // void findMinHorizontalSeam(Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int height, unsigned int seam[]) {
 //   // TODO: implement (part 2)
